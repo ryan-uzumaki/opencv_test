@@ -12,6 +12,7 @@ int main() {
 	imshow("input", src);
 	QuickDemo qd;
 	qd.colorspace_transform(src);
+	qd.image_create(src);
 	waitKey(0);
 	destroyAllWindows();
 	return 0;
