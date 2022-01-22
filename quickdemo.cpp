@@ -20,7 +20,9 @@ void QuickDemo::image_create(Mat& image) {
 	image.copyTo(m2);
 
 	Mat m3;
-	m3 = Mat::zeros(Size(8, 8), CV_8UC3);
+	m3 = Mat::zeros(Size(400,400), CV_8UC3);
+	m3 = Scalar(0, 255, 0);
 	cout << " width: " << m3.cols << " heights:" << m3.rows << " channels: " << m3.channels() << endl;
-	cout << m3 << endl;
+	//cout << m3 << endl;
+	imshow("pic", m3);
 }
