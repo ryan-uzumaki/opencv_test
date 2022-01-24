@@ -7,4 +7,6 @@ class QuickDemo {
 public:
 	void colorspace_transform(Mat& image);
 	void image_create(Mat& image);
+	void pixel_visit(Mat& image);
+	void operators_demo(Mat& image);
 };
