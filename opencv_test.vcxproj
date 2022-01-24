@@ -142,7 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="quickdemo.cpp" />
+    <ClCompile Include="my_quickdemo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="opencvQuickDemo.h" />

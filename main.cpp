@@ -9,6 +9,7 @@ using namespace cv;
 int main() {
 	Mat src = imread("D:\\Wallhaven\\wallhaven-j5915p_3840x2160.png");
 	namedWindow("input", WINDOW_FREERATIO);
+	cout << src << endl;
 	imshow("input", src);
 	QuickDemo qd;
 	qd.colorspace_transform(src);
