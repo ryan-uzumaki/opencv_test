@@ -22,7 +22,8 @@ void QuickDemo::colorspace_transform(Mat& image) {
 
 void QuickDemo::image_create(Mat& image) {
 	Mat m1, m2;
-	m1 = image.clone();//two methods of copying a image
+	//two methods of copying a image
+	m1 = image.clone();
 	image.copyTo(m2);
 
 	Mat m3;
@@ -34,6 +35,7 @@ void QuickDemo::image_create(Mat& image) {
 	imshow("pic", m3);
 }
 
+//visit single pixel and operate on it
 void QuickDemo::pixel_visit(Mat& image) {
 	int width = image.cols;
 	int height = image.rows;
@@ -59,7 +61,7 @@ void QuickDemo::pixel_visit(Mat& image) {
 void QuickDemo::operators_demo(Mat& image) {
 	Mat dst = Mat::zeros(image.size(), image.type());
 	Mat m = Mat::zeros(image.size(), image.type());
-	m = Scalar(5, 5, 5);
+	m = Scalar(50, 50, 50);
 	/*adding principle:
 	int w = image.cols;
 	int h = image.rows;
@@ -74,8 +76,40 @@ void QuickDemo::operators_demo(Mat& image) {
 		}
 	}
 	*/
-	add(image, m, dst);
 	subtract(image, m, dst);
+	/*
+	corresponding to the +&-&*&/ operator:
+	add(image, m, dst);
 	multiply(image, m, dst);
 	divide(image, m, dst);
+	*/
+	namedWindow("after_operate", WINDOW_FREERATIO);
+	imshow("after_operate", dst);
+}
+
+static void on_lightness(int b, void* userdata) {
+	Mat image = *((Mat*)userdata);
+	Mat dst = Mat::zeros(image.size(), image.type());
+	Mat m = Mat::zeros(image.size(), image.type());
+	addWeighted(image, 1.0, m, 0, b, dst);
+	imshow("亮度与对比度调整", dst);
+}
+
+static void on_contrast(int b, void* userdata) {
+	Mat image = *((Mat*)userdata);
+	Mat dst = Mat::zeros(image.size(), image.type());
+	Mat m = Mat::zeros(image.size(), image.type());
+	double contrast = b / 100.0;
+	addWeighted(image, contrast, m, 0.0, 0, dst);
+	imshow("亮度与对比度调整", dst);
+}
+
+void QuickDemo::tracking_bar_demo(Mat& image) {
+	int lightness = 50;
+	int max_value = 100;
+	int contrast_value = 100;
+	namedWindow("亮度与对比度调整", WINDOW_FREERATIO);
+	createTrackbar("Value Bar:", "亮度与对比度调整", &lightness, max_value, on_lightness, (void*)(&image));
+	createTrackbar("Contrast Bar:", "亮度与对比度调整", &contrast_value, 200, on_contrast, (void*)(&image));
+	on_lightness(50, &image);
 }

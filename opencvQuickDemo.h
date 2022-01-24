@@ -9,4 +9,5 @@ public:
 	void image_create(Mat& image);
 	void pixel_visit(Mat& image);
 	void operators_demo(Mat& image);
+	void tracking_bar_demo(Mat& image);
 };
