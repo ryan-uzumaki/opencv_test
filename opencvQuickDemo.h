@@ -10,4 +10,5 @@ public:
 	void pixel_visit(Mat& image);
 	void operators_demo(Mat& image);
 	void tracking_bar_demo(Mat& image);
+	void key_respond(Mat& image);
 };

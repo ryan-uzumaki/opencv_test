@@ -62,7 +62,7 @@ void QuickDemo::operators_demo(Mat& image) {
 	Mat dst = Mat::zeros(image.size(), image.type());
 	Mat m = Mat::zeros(image.size(), image.type());
 	m = Scalar(50, 50, 50);
-	/*adding principle:
+	/*adding principle(can be used to enhance the luminance):
 	int w = image.cols;
 	int h = image.rows;
 	int dims = image.channels();
@@ -87,7 +87,8 @@ void QuickDemo::operators_demo(Mat& image) {
 	imshow("after_operate", dst);
 }
 
-static void on_lightness(int b, void* userdata) {
+//the "on_lightness" & "on_contrast" function can add a "static" before "void"
+void on_lightness(int b, void* userdata) {
 	Mat image = *((Mat*)userdata);
 	Mat dst = Mat::zeros(image.size(), image.type());
 	Mat m = Mat::zeros(image.size(), image.type());
@@ -95,7 +96,7 @@ static void on_lightness(int b, void* userdata) {
 	imshow("亮度与对比度调整", dst);
 }
 
-static void on_contrast(int b, void* userdata) {
+void on_contrast(int b, void* userdata) {
 	Mat image = *((Mat*)userdata);
 	Mat dst = Mat::zeros(image.size(), image.type());
 	Mat m = Mat::zeros(image.size(), image.type());
@@ -109,7 +110,33 @@ void QuickDemo::tracking_bar_demo(Mat& image) {
 	int max_value = 100;
 	int contrast_value = 100;
 	namedWindow("亮度与对比度调整", WINDOW_FREERATIO);
-	createTrackbar("Value Bar:", "亮度与对比度调整", &lightness, max_value, on_lightness, (void*)(&image));
-	createTrackbar("Contrast Bar:", "亮度与对比度调整", &contrast_value, 200, on_contrast, (void*)(&image));
+	createTrackbar("Value Bar:", "亮度与对比度调整", 
+		&lightness, max_value, on_lightness, (void*)(&image));
+	createTrackbar("Contrast Bar:", "亮度与对比度调整", 
+		&contrast_value, 200, on_contrast, (void*)(&image));
 	on_lightness(50, &image);
+}
+
+void QuickDemo::key_respond(Mat& image) {
+	Mat dst=Mat::zeros(image.size(),image.type());
+	while (true) {
+		int c = waitKey(100);
+		if (c == 27) {//esc
+			break;
+		}
+		else if (c == 49) {//key#1
+			cout << "enter #1" << endl;
+			cvtColor(image, dst, COLOR_BGR2GRAY);
+		}
+		else if (c == 50) {//key#2
+			cout << "enter #2" << endl;
+			cvtColor(image, dst, COLOR_BGR2HSV);
+		}
+		else if (c == 51) {//key#3
+			cout << "enter #3" << endl;
+			dst = Scalar(50, 50, 50);
+			add(image, dst, dst);
+		}
+		imshow("output", dst);
+	}
 }

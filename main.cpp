@@ -12,7 +12,7 @@ int main() {
 	imshow("input", src);
 	QuickDemo qd;
 	//qd.colorspace_transform(src);
-	qd.tracking_bar_demo(src);
+	qd.key_respond(src);
 	//qd.pixel_visit(src);
 	waitKey(0);
 	destroyAllWindows();
