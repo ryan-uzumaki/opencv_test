@@ -120,7 +120,7 @@ void QuickDemo::tracking_bar_demo(Mat& image) {
 void QuickDemo::key_respond(Mat& image) {
 	Mat dst=Mat::zeros(image.size(),image.type());
 	while (true) {
-		int c = waitKey(100);
+		int c = waitKey(100);//while processing a video it should be "waitKey(1)"
 		if (c == 27) {//esc
 			break;
 		}
@@ -139,4 +139,76 @@ void QuickDemo::key_respond(Mat& image) {
 		}
 		imshow("output", dst);
 	}
+}
+
+void QuickDemo::color_style_demo(Mat& image) {
+	int colormap[] = {
+		COLORMAP_AUTUMN,
+		COLORMAP_BONE,
+		COLORMAP_JET,
+		COLORMAP_WINTER,
+		COLORMAP_RAINBOW,
+		COLORMAP_OCEAN,
+		COLORMAP_SUMMER,
+		COLORMAP_SPRING,
+		COLORMAP_COOL,
+		COLORMAP_PINK,
+		COLORMAP_HOT,
+		COLORMAP_PARULA,
+		COLORMAP_MAGMA,
+		COLORMAP_INFERNO,
+		COLORMAP_PLASMA,
+		COLORMAP_VIRIDIS,
+		COLORMAP_CIVIDIS,
+		COLORMAP_TWILIGHT,
+		COLORMAP_TWILIGHT_SHIFTED
+	};
+
+	Mat dst;
+	int index = 0;
+	while (true) {
+		int c = waitKey(500);
+		if (c == 27) { // 退出
+			break;
+		}
+		applyColorMap(image, dst, colormap[index % 19]);
+		index++;
+		namedWindow("color_style", WINDOW_FREERATIO);
+		imshow("color_style", dst);
+	}
+}
+
+void QuickDemo::bitwise_demo(Mat& image) {
+	Mat m1 = Mat::zeros(Size(10, 10), CV_8UC3);
+	Mat m2 = Mat::zeros(Size(10, 10), CV_8UC3);
+	Mat dst;
+	rectangle(m1, Rect(0, 0, 5, 5), Scalar(255, 255, 0), -1, LINE_8, 0);
+	rectangle(m2, Rect(3, 3, 5, 5), Scalar(0, 100, 254), -1, LINE_8, 0);
+	//imshow("m1", m1);
+	//imshow("m2", m2);
+	bitwise_xor(m1, m2, dst);//bitwise_or,bitwise_and
+	cout << dst << endl;
+	imshow("dst", dst);
+}
+
+void QuickDemo::channels_demo(Mat& image) {
+	vector<Mat> mv;
+	split(image, mv);
+	imshow("蓝色", mv[0]);
+	imshow("绿色", mv[1]);
+	imshow("红色", mv[2]);
+
+	Mat dst;
+	mv[0] = 0;
+	// mv[1] = 0;
+	merge(mv, dst);
+	imshow("红色", dst);
+
+	int from_to[] = { 0, 2, 1,1, 2, 0 };
+	/*
+	input matrix address, input matrix number, output matrix address, 
+	output matrix number,mixed list,mixed channels pairs number
+	*/
+	mixChannels(&image, 1, &dst, 1, from_to, 3);
+	imshow("通道混合", dst);
 }
