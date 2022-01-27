@@ -7,12 +7,12 @@ using namespace cv;
 
 
 int main() {
-	Mat src = imread("D:\\Wallhaven\\wallhaven-j5915p_3840x2160.png");
+	Mat src = imread("D:\\Wallhaven\\wallhaven-lmyyvr_3840x2160.png");
 	//namedWindow("input", WINDOW_FREERATIO);
 	//imshow("input", src);
 	QuickDemo qd;
 	//qd.colorspace_transform(src);
-	qd.bitwise_demo(src);
+	qd.inrange_demo(src);
 	//qd.pixel_visit(src);
 	waitKey(0);
 	destroyAllWindows();

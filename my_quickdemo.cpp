@@ -193,7 +193,7 @@ void QuickDemo::bitwise_demo(Mat& image) {
 
 void QuickDemo::channels_demo(Mat& image) {
 	vector<Mat> mv;
-	split(image, mv);
+	split(image, mv);//channels seperated
 	imshow("蓝色", mv[0]);
 	imshow("绿色", mv[1]);
 	imshow("红色", mv[2]);
@@ -211,4 +211,21 @@ void QuickDemo::channels_demo(Mat& image) {
 	*/
 	mixChannels(&image, 1, &dst, 1, from_to, 3);
 	imshow("通道混合", dst);
+}
+
+void QuickDemo::inrange_demo(Mat& image) {
+	Mat hsv;
+	cvtColor(image, hsv, COLOR_BGR2HSV);
+	Mat mask;
+	inRange(hsv, Scalar(0,0,0), Scalar(180,255,46), mask);
+	bitwise_not(mask, mask);
+	Mat redback=Mat::zeros(image.size(),image.type());
+	redback = Scalar(40, 40, 220);
+	image.copyTo(redback, mask);
+	namedWindow("after_mask", WINDOW_FREERATIO);
+	namedWindow("origin_pic", WINDOW_FREERATIO);
+	imshow("origin_pic", image);
+	namedWindow("mask", WINDOW_FREERATIO);
+	imshow("mask", mask);
+	imshow("after_mask", redback);
 }
