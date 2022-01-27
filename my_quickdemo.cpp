@@ -219,13 +219,32 @@ void QuickDemo::inrange_demo(Mat& image) {
 	Mat mask;
 	inRange(hsv, Scalar(0,0,0), Scalar(180,255,46), mask);
 	bitwise_not(mask, mask);
-	Mat redback=Mat::zeros(image.size(),image.type());
-	redback = Scalar(40, 40, 220);
-	image.copyTo(redback, mask);
+	Mat back=Mat::zeros(image.size(),image.type());
+	back = Scalar(40, 220, 40);
+	image.copyTo(back, mask);
 	namedWindow("after_mask", WINDOW_FREERATIO);
 	namedWindow("origin_pic", WINDOW_FREERATIO);
-	imshow("origin_pic", image);
 	namedWindow("mask", WINDOW_FREERATIO);
+	imshow("origin_pic", image);
 	imshow("mask", mask);
-	imshow("after_mask", redback);
+	imshow("after_mask", back);
+}
+
+void QuickDemo::pixel_statistic_demo(Mat& image) {
+	double minv, maxv;
+	Point minLoc, maxLoc;
+	std::vector<Mat> mv;
+	split(image, mv);
+	//minMaxLoc function only accepts 1 channel, so we need to use split function
+	for (int i = 0; i < mv.size(); i++) {
+		minMaxLoc(mv[i], &minv, &maxv, &minLoc, &maxLoc, Mat());
+		std::cout << "No. channels:" << i << " min value:" << minv << " max value:" << maxv << std::endl;
+	}
+	Mat mean, stddev;
+	Mat redback = Mat::zeros(image.size(), image.type());
+	redback = Scalar(40, 40, 200);
+	meanStdDev(redback, mean, stddev);
+	imshow("redback", redback);
+	std::cout << "means:" << mean << std::endl;
+	std::cout << " stddev:" << stddev << std::endl;
 }
