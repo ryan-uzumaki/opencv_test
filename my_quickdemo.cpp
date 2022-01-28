@@ -241,10 +241,8 @@ void QuickDemo::pixel_statistic_demo(Mat& image) {
 		std::cout << "No. channels:" << i << " min value:" << minv << " max value:" << maxv << std::endl;
 	}
 	Mat mean, stddev;
-	Mat redback = Mat::zeros(image.size(), image.type());
-	redback = Scalar(40, 40, 200);
-	meanStdDev(redback, mean, stddev);
-	imshow("redback", redback);
+	//可以利用均值和方差来降噪
+	meanStdDev(image, mean, stddev);
 	std::cout << "means:" << mean << std::endl;
 	std::cout << " stddev:" << stddev << std::endl;
 }
