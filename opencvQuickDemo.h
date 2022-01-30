@@ -16,4 +16,6 @@ public:
 	void channels_demo(Mat& image);
 	void inrange_demo(Mat& image);
 	void pixel_statistic_demo(Mat& image);
+	void drawing_demo(Mat& image);
+	void random_drawing();
 };

@@ -193,7 +193,7 @@ void QuickDemo::bitwise_demo(Mat& image) {
 	Mat dst;
 	rectangle(m1, Rect(0, 0, 5, 5), Scalar(255, 255, 0), -1, LINE_8, 0);
 	rectangle(m2, Rect(3, 3, 5, 5), Scalar(0, 100, 254), -1, LINE_8, 0);
-	/*rectangle函数得倒数第三个参数小于零表示填充，大于零表示绘制边
+	/*rectangle函数是一个矩形绘制函数，它的倒数第三个参数小于零表示填充，大于零表示绘制边时的线宽
 	Rect(x,y,width,height)，x, y为左上角坐标,width, height则为长和宽*/
 	//imshow("m1", m1);
 	//imshow("m2", m2);
@@ -259,4 +259,47 @@ void QuickDemo::pixel_statistic_demo(Mat& image) {
 	meanStdDev(image, mean, stddev);
 	std::cout << "means:" << mean << std::endl;
 	std::cout << " stddev:" << stddev << std::endl;
+}
+
+void QuickDemo::drawing_demo(Mat& image) {
+	Rect rect;
+	rect.x = 100;
+	rect.y = 100;
+	rect.width = 250;
+	rect.height = 300;
+	Mat bg = Mat::zeros(image.size(), image.type());
+	rectangle(bg, rect, Scalar(0, 0, 255), -1, 8, 0);
+	circle(bg, Point(350, 400), 15, Scalar(255, 0, 0), -1, 8, 0);
+	line(bg, Point(100, 100), Point(350, 400), Scalar(0, 255, 0), 4, LINE_AA, 0);
+	RotatedRect rrt;
+	rrt.center = Point(200, 200);
+	rrt.size = Size(100, 200);
+	rrt.angle = 90.0;
+	ellipse(bg, rrt, Scalar(0, 255, 255), 2, 8);
+	Mat dst;
+	addWeighted(image, 0.7, bg, 0.3, 0, dst);
+	imshow("绘制演示", bg);
+}
+
+void QuickDemo::random_drawing() {
+	Mat canvas = Mat::zeros(Size(512, 512), CV_8UC3);
+	int w = canvas.cols;
+	int h = canvas.rows;
+	RNG rng(12345);
+	while (true) {
+		int c = waitKey(10);
+		if (c == 27) { // 退出
+			break;
+		}
+		int x1 = rng.uniform(0, w);
+		int y1 = rng.uniform(0, h);
+		int x2 = rng.uniform(0, w);
+		int y2 = rng.uniform(0, h);
+		int b = rng.uniform(0, 255);
+		int g = rng.uniform(0, 255);
+		int r = rng.uniform(0, 255);
+		canvas = Scalar(0, 0, 0);
+		line(canvas, Point(x1, y1), Point(x2, y2), Scalar(b, g, r), 1, LINE_AA, 0);
+		imshow("随机绘制演示", canvas);
+	}
 }
