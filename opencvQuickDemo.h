@@ -18,4 +18,5 @@ public:
 	void pixel_statistic_demo(Mat& image);
 	void drawing_demo(Mat& image);
 	void random_drawing();
+	void polyline_drawing_demo();
 };

@@ -230,10 +230,10 @@ void QuickDemo::inrange_demo(Mat& image) {
 	Mat hsv;
 	cvtColor(image, hsv, COLOR_BGR2HSV);
 	Mat mask;
-	inRange(hsv, Scalar(0,0,0), Scalar(180,255,46), mask);
+	inRange(hsv, Scalar(11,43,46), Scalar(25,255,255), mask);
 	bitwise_not(mask, mask);
 	Mat back=Mat::zeros(image.size(),image.type());
-	back = Scalar(40, 220, 40);
+	back = Scalar(220, 40, 40);
 	image.copyTo(back, mask);
 	namedWindow("after_mask", WINDOW_FREERATIO);
 	namedWindow("origin_pic", WINDOW_FREERATIO);
@@ -262,7 +262,7 @@ void QuickDemo::pixel_statistic_demo(Mat& image) {
 }
 
 void QuickDemo::drawing_demo(Mat& image) {
-	Rect rect;
+	Rect rect;//创建rect对象，若不分开设定参数则可以用之前rectangle方法中的Rect()函数
 	rect.x = 100;
 	rect.y = 100;
 	rect.width = 250;
@@ -270,7 +270,9 @@ void QuickDemo::drawing_demo(Mat& image) {
 	Mat bg = Mat::zeros(image.size(), image.type());
 	rectangle(bg, rect, Scalar(0, 0, 255), -1, 8, 0);
 	circle(bg, Point(350, 400), 15, Scalar(255, 0, 0), -1, 8, 0);
+	//point()是指定中心点，15是半径
 	line(bg, Point(100, 100), Point(350, 400), Scalar(0, 255, 0), 4, LINE_AA, 0);
+	//有两个point()函数，第一个是指定起始点，第二个是指定终点
 	RotatedRect rrt;
 	rrt.center = Point(200, 200);
 	rrt.size = Size(100, 200);
@@ -285,7 +287,7 @@ void QuickDemo::random_drawing() {
 	Mat canvas = Mat::zeros(Size(512, 512), CV_8UC3);
 	int w = canvas.cols;
 	int h = canvas.rows;
-	RNG rng(12345);
+	RNG rng(1234567);
 	while (true) {
 		int c = waitKey(10);
 		if (c == 27) { // 退出
@@ -303,3 +305,28 @@ void QuickDemo::random_drawing() {
 		imshow("随机绘制演示", canvas);
 	}
 }
+
+void QuickDemo::polyline_drawing_demo() {
+	Mat canvas = Mat::zeros(Size(512, 512), CV_8UC3);
+	int w = canvas.cols;
+	int h = canvas.rows;
+	Point p1(100, 100);
+	Point p2(300, 150);
+	Point p3(300, 350);
+	Point p4(250, 450);
+	Point p5(50, 450);
+	std::vector<Point> pts;
+	pts.push_back(p1);
+	pts.push_back(p2);
+	pts.push_back(p3);
+	pts.push_back(p3);
+	pts.push_back(p4);
+	pts.push_back(p5);
+	// polylines(canvas, pts, true, Scalar(0, 255, 0), -1, 8, 0);
+	std::vector<std::vector<Point>> contours;//创建点集向量contours
+	contours.push_back(pts);
+	//【drawoContours(画布，点集对象，点集对象索引（-1表示一次性绘制全部），颜色，绘制方式（-1为填充），线形（LINE_AA为反锯齿））】
+	drawContours(canvas, contours, 0, Scalar(0, 0, 255), -1, 8);
+	imshow("绘制多边形", canvas);
+}
+
