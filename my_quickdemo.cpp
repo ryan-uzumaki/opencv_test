@@ -330,10 +330,37 @@ void QuickDemo::polyline_drawing_demo() {
 	imshow("ªÊ÷∆∂‡±ﬂ–Œ", canvas);
 }
 
+Point sp(-1, -1);
+Point ep(-1, -1);
+Mat temp;
+void onMouse(int event, int x, int y, int flags, void* param) {
+	Mat image = *((Mat*)param);
+	if (event == EVENT_LBUTTONDOWN) {
+		sp.x = x;
+		sp.y = y;
+		cout << "start_point: " << sp << endl;
+	}
+	else if (event == EVENT_LBUTTONUP) {
+		ep.x = x;
+		ep.y = y;
+		double dx = ep.x - sp.x;
+		double dy = ep.y - sp.y;
+		if ((dx > 0) && (dy > 0)) {
+			Rect box(sp.x, sp.y, dx, dy);
+			image = temp.clone();
+			rectangle(image, box, Scalar(0, 0, 255), 2, 8, 0);
+			imshow("ROI_area", image(box));
+			imshow("mouse_drawing", image);
+		}
+		
+
+	}
+}
 void QuickDemo::mouse_drawing_demo(Mat& image) {
 	namedWindow("mouse_behaviour", WINDOW_FREERATIO);
 	setMouseCallback("mouse_behaviour", onMouse, (void*)&image);
 	imshow("mouse_behaviour", image);
+	temp = image.clone();
 }
 
 
