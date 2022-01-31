@@ -330,3 +330,10 @@ void QuickDemo::polyline_drawing_demo() {
 	imshow("ªÊ÷∆∂‡±ﬂ–Œ", canvas);
 }
 
+void QuickDemo::mouse_drawing_demo(Mat& image) {
+	namedWindow("mouse_behaviour", WINDOW_FREERATIO);
+	setMouseCallback("mouse_behaviour", onMouse, (void*)&image);
+	imshow("mouse_behaviour", image);
+}
+
+

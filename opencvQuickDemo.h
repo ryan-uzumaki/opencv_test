@@ -19,4 +19,5 @@ public:
 	void drawing_demo(Mat& image);
 	void random_drawing();
 	void polyline_drawing_demo();
+	void mouse_drawing_demo(Mat& image);
 };

@@ -7,7 +7,7 @@ using namespace cv;
 
 
 int main() {
-	Mat src = imread("C:\\Users\\ryand\\Pictures\\Camera Roll\\WeChat Image_20220130135729.jpg");
+	Mat src = imread("D:\\Wallhaven\\23.jpg");
 	//namedWindow("input", WINDOW_FREERATIO);
 	//imshow("input", src);
 	QuickDemo qd;
