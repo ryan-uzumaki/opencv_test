@@ -348,12 +348,27 @@ void onMouse(int event, int x, int y, int flags, void* param) {
 		if ((dx > 0) && (dy > 0)) {
 			Rect box(sp.x, sp.y, dx, dy);
 			image = temp.clone();
-			rectangle(image, box, Scalar(0, 0, 255), 2, 8, 0);
 			imshow("ROI_area", image(box));
-			imshow("mouse_drawing", image);
+			rectangle(image, box, Scalar(0, 0, 255), 2, 8, 0);
+			namedWindow("mouse_behaviour", WINDOW_FREERATIO);
+			imshow("mouse_behabiour", image);
+			sp.x = -1;
+			sp.y = -1;
 		}
-		
-
+	}
+	else if (event == EVENT_MOUSEMOVE) {
+		if (sp.x > 0 && sp.y > 0) {
+			ep.x = x;
+			ep.y = y;
+			int dx = ep.x - sp.x;
+			int dy = ep.y - sp.y;
+			if (dx > 0 && dy > 0) {
+				Rect box(sp.x, sp.y, dx, dy);
+				temp.copyTo(image);
+				rectangle(image, box, Scalar(0, 0, 255), 2, 8, 0);
+				imshow("mouse_behabiour", image);
+			}
+		}
 	}
 }
 void QuickDemo::mouse_drawing_demo(Mat& image) {
