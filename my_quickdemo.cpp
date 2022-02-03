@@ -1,5 +1,4 @@
 #include <opencvQuickDemo.h>
-
 using namespace std;
 
 void QuickDemo::colorspace_transform(Mat& image) {
@@ -388,13 +387,38 @@ void QuickDemo::norm_demo(Mat& image) {
 	// CV_8UC3, CV_32FC3
 }
 
+
+static void onmouse_callback(int event, int x, int y, int flags, void* userdata) {
+	Mat image = *(Mat*)userdata;
+	Mat zoomin;
+	long h = image.rows;
+	long w = image.cols;
+	int value;
+	if (event == EVENT_MOUSEWHEEL) {
+		value = getMouseWheelDelta(flags);
+		if (value > 0) {
+			resize(image, zoomin, Size(w * 1.5, h * 1.5), 0, 0, INTER_LINEAR);
+			//imshow("resize", zoomin);
+			w *= 1.5;
+			h *= 1.5;
+		}
+		else if (value < 0) {
+			resize(image, zoomin, Size(w / 1.5, h / 1.5), 0, 0, INTER_LINEAR);
+			//imshow("resize", zoomin);
+			w /= 1.5;
+			h /= 1.5;
+		}
+		if (!image.empty())
+		{
+			imshow("resize", zoomin);;
+		}
+	}
+}
 void QuickDemo::resize_demo(Mat& image) {
-	Mat zoomin, zoomout;
-	int h = image.rows;
-	int w = image.cols;
-	//resize函数第四与第五个参数在第三个参数为Size（0，0）时才会用到，其值分别为x方向与y方向的长度
-	resize(image, zoomin, Size(w / 2, h / 2), 0, 0, INTER_LINEAR);//INTER_LINEAR方式运行最为快捷
-	imshow("zoomin", zoomin);
-	resize(image, zoomout, Size(w * 1.5, h * 1.5), 0, 0, INTER_LINEAR);
-	imshow("zoomout", zoomout);
+	namedWindow("resize",WINDOW_AUTOSIZE);
+	imshow("resize", image);
+	setMouseCallback("resize", onmouse_callback, (void*)(&image));
+	/*resize函数第四与第五个参数在第三个参数为Size（0，0）时才会用到，
+	其值分别为x方向与y方向的长度resize(image, zoomin, Size(w / 2, h / 2), 0, 0, INTER_LINEAR);
+	INTER_LINEAR方式运行最为快捷*/
 }

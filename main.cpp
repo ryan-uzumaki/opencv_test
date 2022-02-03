@@ -7,12 +7,12 @@ using namespace cv;
 
 
 int main() {
-	Mat src = imread("D:\\Wallhaven\\23.jpg");
+	Mat src = imread("C:\\Users\\ryand\\Pictures\\Camera Roll\\WeChat Image_202201301357291.jpg");
 	//namedWindow("input", WINDOW_FREERATIO);
 	//imshow("input", src);
 	QuickDemo qd;
 	//qd.colorspace_transform(src);
-	qd.mouse_drawing_demo(src);
+	qd.resize_demo(src);
 	//qd.pixel_visit(src);
 	waitKey(0);
 	destroyAllWindows();
