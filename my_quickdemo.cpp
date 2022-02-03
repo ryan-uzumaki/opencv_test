@@ -376,3 +376,25 @@ void QuickDemo::mouse_drawing_demo(Mat& image) {
 	imshow("mouse_behaviour", image);
 	temp = image.clone();
 }
+
+void QuickDemo::norm_demo(Mat& image) {
+	Mat dst;
+	std::cout << image.type() << std::endl;
+	image.convertTo(image, CV_32F);//转成32位的浮点数CV_32FC3
+	std::cout << image.type() << std::endl;
+	normalize(image, dst, 1.0, 0, NORM_MINMAX);//NORM_MINMAX最为常用，在做norm分布是一定要先将图像转变为浮点数
+	std::cout << dst.type() << std::endl;
+	imshow("图像数据归一化", dst);
+	// CV_8UC3, CV_32FC3
+}
+
+void QuickDemo::resize_demo(Mat& image) {
+	Mat zoomin, zoomout;
+	int h = image.rows;
+	int w = image.cols;
+	//resize函数第四与第五个参数在第三个参数为Size（0，0）时才会用到，其值分别为x方向与y方向的长度
+	resize(image, zoomin, Size(w / 2, h / 2), 0, 0, INTER_LINEAR);//INTER_LINEAR方式运行最为快捷
+	imshow("zoomin", zoomin);
+	resize(image, zoomout, Size(w * 1.5, h * 1.5), 0, 0, INTER_LINEAR);
+	imshow("zoomout", zoomout);
+}

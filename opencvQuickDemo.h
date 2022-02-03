@@ -20,4 +20,6 @@ public:
 	void random_drawing();
 	void polyline_drawing_demo();
 	void mouse_drawing_demo(Mat& image);
+	void norm_demo(Mat& image);
+	void resize_demo(Mat& image);
 };
