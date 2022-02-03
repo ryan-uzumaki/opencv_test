@@ -333,8 +333,8 @@ void QuickDemo::polyline_drawing_demo() {
 Point sp(-1, -1);
 Point ep(-1, -1);
 Mat temp;
-void onMouse(int event, int x, int y, int flags, void* param) {
-	Mat image = *((Mat*)param);
+static void onMouse(int event, int x, int y, int flags, void* userdata) {
+	Mat image = *((Mat*)userdata);
 	if (event == EVENT_LBUTTONDOWN) {
 		sp.x = x;
 		sp.y = y;
@@ -343,14 +343,13 @@ void onMouse(int event, int x, int y, int flags, void* param) {
 	else if (event == EVENT_LBUTTONUP) {
 		ep.x = x;
 		ep.y = y;
-		double dx = ep.x - sp.x;
-		double dy = ep.y - sp.y;
+		int dx = ep.x - sp.x;
+		int dy = ep.y - sp.y;
 		if ((dx > 0) && (dy > 0)) {
 			Rect box(sp.x, sp.y, dx, dy);
-			image = temp.clone();
+			temp.copyTo(image);
 			imshow("ROI_area", image(box));
 			rectangle(image, box, Scalar(0, 0, 255), 2, 8, 0);
-			namedWindow("mouse_behaviour", WINDOW_FREERATIO);
 			imshow("mouse_behabiour", image);
 			sp.x = -1;
 			sp.y = -1;
@@ -373,9 +372,7 @@ void onMouse(int event, int x, int y, int flags, void* param) {
 }
 void QuickDemo::mouse_drawing_demo(Mat& image) {
 	namedWindow("mouse_behaviour", WINDOW_FREERATIO);
-	setMouseCallback("mouse_behaviour", onMouse, (void*)&image);
+	setMouseCallback("mouse_behaviour", onMouse, (void*)(&image));
 	imshow("mouse_behaviour", image);
 	temp = image.clone();
 }
-
-
