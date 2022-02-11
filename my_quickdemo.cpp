@@ -79,7 +79,7 @@ void QuickDemo::operators_demo(Mat& image) {
 	subtract(image, m, dst);//减法dst=image-m本质上此条语句是在调整亮度
 	/*
 	corresponding to the +&-&*&/ operator:
-	add(image, m, dst);
+	add(image, m, dst);与减法相同也是再调整亮度 dst=image+m
 	multiply(image, m, dst);
 	divide(image, m, dst);
 	*/
@@ -324,7 +324,7 @@ void QuickDemo::polyline_drawing_demo() {
 	// polylines(canvas, pts, true, Scalar(0, 255, 0), -1, 8, 0);
 	std::vector<std::vector<Point>> contours;//创建点集向量contours
 	contours.push_back(pts);
-	//【drawoContours(画布，点集对象，点集对象索引（-1表示一次性绘制全部），颜色，绘制方式（-1为填充），线形（LINE_AA为反锯齿））】
+	//【drawoContours(画布，点集对象，点集对象索引（-1表示一次性绘制全部），颜色，绘制方式（-1为填充），线形（LINE_AA为反锯齿,该参数默认为8））】
 	drawContours(canvas, contours, 0, Scalar(0, 0, 255), -1, 8);
 	imshow("绘制多边形", canvas);
 }
@@ -371,9 +371,9 @@ static void onMouse(int event, int x, int y, int flags, void* userdata) {
 }
 void QuickDemo::mouse_drawing_demo(Mat& image) {
 	namedWindow("mouse_behaviour", WINDOW_FREERATIO);
+	temp = image.clone();
 	setMouseCallback("mouse_behaviour", onMouse, (void*)(&image));
 	imshow("mouse_behaviour", image);
-	temp = image.clone();
 }
 
 void QuickDemo::norm_demo(Mat& image) {
