@@ -347,8 +347,10 @@ static void onMouse(int event, int x, int y, int flags, void* userdata) {
 		if ((dx > 0) && (dy > 0)) {
 			Rect box(sp.x, sp.y, dx, dy);
 			temp.copyTo(image);
+			namedWindow("ROI_area", WINDOW_FREERATIO);
 			imshow("ROI_area", image(box));
 			rectangle(image, box, Scalar(0, 0, 255), 2, 8, 0);
+			namedWindow("mouse_behaviour", WINDOW_FREERATIO);
 			imshow("mouse_behabiour", image);
 			sp.x = -1;
 			sp.y = -1;
@@ -363,6 +365,7 @@ static void onMouse(int event, int x, int y, int flags, void* userdata) {
 			if (dx > 0 && dy > 0) {
 				Rect box(sp.x, sp.y, dx, dy);
 				temp.copyTo(image);
+				namedWindow("mouse_behaviour", WINDOW_FREERATIO);
 				rectangle(image, box, Scalar(0, 0, 255), 2, 8, 0);
 				imshow("mouse_behabiour", image);
 			}
@@ -383,11 +386,11 @@ void QuickDemo::norm_demo(Mat& image) {
 	std::cout << image.type() << std::endl;
 	normalize(image, dst, 1.0, 0, NORM_MINMAX);//NORM_MINMAX最为常用，在做norm分布是一定要先将图像转变为浮点数
 	std::cout << dst.type() << std::endl;
-	imshow("图像数据归一化", dst);
+	imshow("图像数据归一化", dst);//用imshow（）来显示浮点数图像的时候必须归一化为零到一之间的数字
 	// CV_8UC3, CV_32FC3
 }
 
-
+//图像放大缩小操作
 static void onmouse_callback(int event, int x, int y, int flags, void* userdata) {
 	Mat image = *(Mat*)userdata;
 	Mat zoomin;
@@ -421,4 +424,62 @@ void QuickDemo::resize_demo(Mat& image) {
 	/*resize函数第四与第五个参数在第三个参数为Size（0，0）时才会用到，
 	其值分别为x方向与y方向的长度resize(image, zoomin, Size(w / 2, h / 2), 0, 0, INTER_LINEAR);
 	INTER_LINEAR方式运行最为快捷*/
+}
+
+//对称处理
+void QuickDemo::flip_demo(Mat& image) {
+	Mat dst;
+	// flip(image, dst, 0); // 上下翻转
+	// flip(image, dst, 1); // 左右翻转
+	flip(image, dst, -1); // 180°旋转
+	imshow("图像翻转", dst);
+}
+
+//图像旋转操作
+void QuickDemo::rotate_demo(Mat& image) {
+	Mat dst, M;
+	int w = image.cols;
+	int h = image.rows;
+	//getRotationMatrix2D()函数第一个参数是源图像的中心点，第二个参数是旋转角度，第三个是缩放比例
+	M = getRotationMatrix2D(Point2f(w / 2, h / 2), 45, 1.0);
+	double cos = abs(M.at<double>(0, 0));
+	double sin = abs(M.at<double>(0, 1));
+	int nw = cos * w + sin * h;//新画布的宽
+	int nh = sin * w + cos * h;//新画布的高
+	//下面两句是调整平移参数，使旋转过后的图像信息不损失
+	//参考链接 https://cloud.tencent.com/developer/article/1798209
+	M.at<double>(0, 2) += (nw / 2 - w / 2);
+	M.at<double>(1, 2) += (nh / 2 - h / 2);
+	warpAffine(image, dst, M, Size(nw, nh), INTER_LINEAR, 0, Scalar(255, 255, 0));
+	imshow("旋转演示", dst);
+}
+
+void QuickDemo::video_demo(Mat& image) {
+	VideoCapture capture(0);
+	int frame_width = capture.get(CAP_PROP_FRAME_WIDTH);//获取视频宽度
+	int frame_height = capture.get(CAP_PROP_FRAME_HEIGHT);//获取视频高度
+	int count = capture.get(CAP_PROP_FRAME_COUNT);//获取总帧数
+	double fps = capture.get(CAP_PROP_FPS);//获取帧数
+	std::cout << "frame width:" << frame_width << std::endl;
+	std::cout << "frame height:" << frame_height << std::endl;
+	std::cout << "FPS:" << fps << std::endl;
+	std::cout << "Number of Frames:" << count << std::endl;
+	//用writer对象写入视频的时候要注意写入视频的size要和capture的size是一样的
+	VideoWriter writer("D:/test.mp4", capture.get(CAP_PROP_FOURCC), fps, Size(frame_width, frame_height), true);
+	Mat frame;
+	while (true) {
+		capture.read(frame);
+		if (frame.empty()) {
+			break;
+		}
+		//这下面直到imshow之前都可以结合之前的函数对每一帧图像进行处理
+		flip(frame, frame, 1);
+		writer.write(frame);
+		imshow("capture", frame);
+		int c = waitKey(1);
+		if (c == 27) {
+			break;
+		}
+	}
+	capture.release();
 }

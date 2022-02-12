@@ -22,4 +22,7 @@ public:
 	void mouse_drawing_demo(Mat& image);
 	void norm_demo(Mat& image);
 	void resize_demo(Mat& image);
+	void flip_demo(Mat& image);
+	void rotate_demo(Mat& image);
+	void video_demo(Mat& image);
 };

@@ -12,7 +12,7 @@ int main() {
 	//imshow("input", src);
 	QuickDemo qd;
 	//qd.colorspace_transform(src);
-	qd.mouse_drawing_demo(src);
+	qd.video_demo(src);
 	//qd.pixel_visit(src);
 	waitKey(0);
 	destroyAllWindows();
