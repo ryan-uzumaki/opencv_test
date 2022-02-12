@@ -26,5 +26,6 @@ public:
 	void rotate_demo(Mat& image);
 	void video_demo(Mat& image);
 	void histogram_demo(Mat& image);
-
+	void histogram_eq_demo(Mat& image);
+	void histogram_2d_demo(Mat& image);
 };

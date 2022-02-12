@@ -484,6 +484,7 @@ void QuickDemo::video_demo(Mat& image) {
 	capture.release();
 }
 
+//绘制图像直方图
 void QuickDemo::histogram_demo(Mat& image) {
 	// 三通道分离
 	std::vector<Mat> bgr_plane;
@@ -512,6 +513,7 @@ void QuickDemo::histogram_demo(Mat& image) {
 	normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
 	// 绘制直方图曲线
 	for (int i = 1; i < bins[0]; i++) {
+		//将图像放在程序框范围内
 		line(histImage, Point(bin_w * (i - 1), hist_h - cvRound(b_hist.at<float>(i - 1))),
 			Point(bin_w * (i), hist_h - cvRound(b_hist.at<float>(i))), Scalar(255, 0, 0), 2, 8, 0);
 		line(histImage, Point(bin_w * (i - 1), hist_h - cvRound(g_hist.at<float>(i - 1))),
@@ -522,4 +524,44 @@ void QuickDemo::histogram_demo(Mat& image) {
 	// 显示直方图
 	namedWindow("Histogram Demo", WINDOW_AUTOSIZE);
 	imshow("Histogram Demo", histImage);
+}
+
+void QuickDemo::histogram_2d_demo(Mat& image) {
+	// 2D 直方图
+	Mat hsv, hs_hist;
+	cvtColor(image, hsv, COLOR_BGR2HSV);
+	int hbins = 30, sbins = 32;
+	int hist_bins[] = { hbins, sbins };
+	float h_range[] = { 0, 180 };
+	float s_range[] = { 0, 256 };
+	const float* hs_ranges[] = { h_range, s_range };
+	int hs_channels[] = { 0, 1 };
+	calcHist(&hsv, 1, hs_channels, Mat(), hs_hist, 2, hist_bins, hs_ranges, true, false);
+	double maxVal = 0;
+	minMaxLoc(hs_hist, 0, &maxVal, 0, 0);
+	int scale = 10;
+	Mat hist2d_image = Mat::zeros(sbins * scale, hbins * scale, CV_8UC3);
+	for (int h = 0; h < hbins; h++) {
+		for (int s = 0; s < sbins; s++)
+		{
+			float binVal = hs_hist.at<float>(h, s);
+			int intensity = cvRound(binVal * 255 / maxVal);
+			rectangle(hist2d_image, Point(h * scale, s * scale),
+				Point((h + 1) * scale - 1, (s + 1) * scale - 1),
+				Scalar::all(intensity),
+				-1);
+		}
+	}
+	applyColorMap(hist2d_image, hist2d_image, COLORMAP_JET);
+	imshow("H-S Histogram", hist2d_image);
+	imwrite("D:/hist_2d.png", hist2d_image);
+}
+
+void QuickDemo::histogram_eq_demo(Mat& image) {
+	Mat gray;
+	cvtColor(image, gray, COLOR_BGR2GRAY);
+	imshow("灰度图像", gray);
+	Mat dst;
+	equalizeHist(gray, dst);
+	imshow("直方图均衡化演示", dst);
 }
