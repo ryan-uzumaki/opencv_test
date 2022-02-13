@@ -28,4 +28,7 @@ public:
 	void histogram_demo(Mat& image);
 	void histogram_eq_demo(Mat& image);
 	void histogram_2d_demo(Mat& image);
+	void blur_demo(Mat& image);
+	void gaussian_blur_demo(Mat& image);
+	void bifilter_demo(Mat& image);
 };

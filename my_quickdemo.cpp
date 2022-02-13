@@ -565,3 +565,27 @@ void QuickDemo::histogram_eq_demo(Mat& image) {
 	equalizeHist(gray, dst);
 	imshow("直方图均衡化演示", dst);
 }
+
+//图像卷积操作（模糊化，可隐藏信息）
+void QuickDemo::blur_demo(Mat& image) {
+	Mat dst;
+	//blur（输入矩阵，输出矩阵，卷积核尺寸（一般为奇数，方便在中心点卷积），Point（-1，-1）默认为中心点卷积）
+	blur(image, dst, Size(15, 15), Point(-1, -1));//卷积核的尺寸不一定为方阵(卷积核系数默认全部为1）
+	imshow("图像模糊", dst);
+}
+
+//高斯模糊（与之前的blur相比，高斯模糊突出了中心点的贡献地位,卷积核离中心点越远的地方值越小）
+void QuickDemo::gaussian_blur_demo(Mat& image) {
+	Mat dst;
+	//GaussianBlur中确立了Size就会自行推算出sigma，反过来也一样
+	GaussianBlur(image, dst, Size(0, 0), 15);
+	imshow("高斯模糊", dst);
+}
+
+void QuickDemo::bifilter_demo(Mat& image) {
+	Mat dst;
+	bilateralFilter(image, dst, 5, 20, 20);
+	//https://blog.csdn.net/kingkee/article/details/94382255?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164474145616780357214582%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=164474145616780357214582&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-4-94382255.pc_search_insert_es_download&utm_term=opencv%E9%AB%98%E6%96%AF%E5%8F%8C%E8%BE%B9%E6%A8%A1%E7%B3%8A%E5%87%BD%E6%95%B0&spm=1018.2226.3001.4187
+	namedWindow("双边模糊", WINDOW_FREERATIO);
+	imshow("双边模糊", dst);
+}
