@@ -31,4 +31,5 @@ public:
 	void blur_demo(Mat& image);
 	void gaussian_blur_demo(Mat& image);
 	void bifilter_demo(Mat& image);
+	void face_detection_demo();
 };
