@@ -109,6 +109,7 @@ void on_contrast(int b, void* userdata) {
 }
 
 void QuickDemo::tracking_bar_demo(Mat& image) {
+	//https://blog.csdn.net/l1216766050/article/details/81783765?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164523415616781683955167%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=164523415616781683955167&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-3-81783765.pc_search_insert_es_download&utm_term=createtrackbar%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0&spm=1018.2226.3001.4187
 	int lightness = 50;
 	int max_value = 100;
 	int contrast_value = 100;
@@ -269,7 +270,7 @@ void QuickDemo::drawing_demo(Mat& image) {
 	Mat bg = Mat::zeros(image.size(), image.type());
 	rectangle(bg, rect, Scalar(0, 0, 255), -1, 8, 0);
 	circle(bg, Point(350, 400), 15, Scalar(255, 0, 0), -1, 8, 0);
-	//point()是指定中心点，15是半径
+	//point()是指定中心点，15是半径,Scalar表示颜色，大于0表示线粗（-1表示填充），线形默认为8，0表示小数点位数
 	line(bg, Point(100, 100), Point(350, 400), Scalar(0, 255, 0), 4, LINE_AA, 0);
 	//有两个point()函数，第一个是指定起始点，第二个是指定终点
 	RotatedRect rrt;
@@ -582,6 +583,7 @@ void QuickDemo::gaussian_blur_demo(Mat& image) {
 	imshow("高斯模糊", dst);
 }
 
+//高斯双边模糊，可保留边缘特征
 void QuickDemo::bifilter_demo(Mat& image) {
 	Mat dst;
 	bilateralFilter(image, dst, 5, 20, 20);
